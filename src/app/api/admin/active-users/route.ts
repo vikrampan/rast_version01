@@ -13,7 +13,6 @@ interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
   password: string;
   organization: string;
   accessLevel: string;
@@ -27,9 +26,9 @@ interface IUser {
 const sessionSchema = new mongoose.Schema<ISession>({
   userId: { type: String, required: true },
   lastActive: { type: Date, required: true },
-}, { 
+}, {
   collection: 'sessions',
-  timestamps: true 
+  timestamps: true
 });
 
 // User Schema with proper typing
@@ -37,7 +36,6 @@ const userSchema = new mongoose.Schema<IUser>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true },
   password: { type: String, required: true },
   organization: { type: String, required: true },
   accessLevel: { type: String, required: true },
@@ -45,9 +43,9 @@ const userSchema = new mongoose.Schema<IUser>({
   isSuperAdmin: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
   lastLogin: { type: Date }
-}, { 
+}, {
   collection: 'users',
-  timestamps: true 
+  timestamps: true
 });
 
 // Model definitions with proper typing
@@ -60,7 +58,6 @@ interface UserProjection {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
   organization: string;
   accessLevel: string;
   lastLogin: Date | null;
@@ -123,7 +120,6 @@ export async function GET() {
         firstName: 1,
         lastName: 1,
         email: 1,
-        phone: 1,
         organization: 1,
         accessLevel: 1,
         lastLogin: 1
@@ -141,7 +137,7 @@ export async function GET() {
     console.error('Error fetching active users:', error);
 
     let errorMessage = 'Failed to fetch active users';
-    
+
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (error && typeof error === 'object' && 'message' in error) {

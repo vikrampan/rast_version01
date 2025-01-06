@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: { type: String, unique: true },
-  phone: String,
   password: String,
   organization: String,
   accessLevel: String,
@@ -56,9 +55,9 @@ export async function GET() {
     await connectDB();
     console.log('Database connected');
 
-    // Modified query - using select() instead of projection object
+
     const users = await User.find()
-      .select('firstName lastName email phone organization accessLevel lastLogin isActive')
+      .select('firstName lastName email organization accessLevel lastLogin isActive')
       .lean();
 
     console.log('Users query completed. Found:', users.length, 'users');

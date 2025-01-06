@@ -4,23 +4,23 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Bell, 
-  User, 
-  LogOut, 
-  Clock, 
-  Calendar, 
-  CheckCircle, 
+  Bell,
+  User,
+  LogOut,
+  Clock,
+  Calendar,
+  CheckCircle,
   XCircle,
-  Users, 
-  AlertCircle, 
-  ChevronDown, 
-  Settings, 
+  Users,
+  AlertCircle,
+  ChevronDown,
+  Settings,
   HelpCircle,
-  Activity, 
-  Shield, 
-  Search, 
-  Filter, 
-  ChevronLeft, 
+  Activity,
+  Shield,
+  Search,
+  Filter,
+  ChevronLeft,
   Settings2
 } from 'lucide-react';
 import Link from 'next/link';
@@ -50,7 +50,6 @@ interface DetailedUser {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
   organization: string;
   accessLevel: string;
   lastLogin: Date;
@@ -154,7 +153,7 @@ export default function AdminDashboard() {
     try {
       const response = await fetch('/api/admin/user-stats');
       const data = await response.json();
-      
+
       if (data.success) {
         setUserStats(data.data);
       } else {
@@ -171,7 +170,7 @@ export default function AdminDashboard() {
       setIsLoading(true);
       const response = await fetch('/api/admin/detailed-users');
       const data = await response.json();
-      
+
       if (data.success) {
         setDetailedUsers(data.users);
       } else {
@@ -190,7 +189,7 @@ export default function AdminDashboard() {
       setIsLoading(true);
       const response = await fetch('/api/admin/active-users');
       const data = await response.json();
-      
+
       if (data.success) {
         setActiveDetailedUsers(data.users);
       } else {
@@ -210,7 +209,7 @@ export default function AdminDashboard() {
       if (!response.ok) {
         throw new Error('Session check failed');
       }
-      
+
       const data = await response.json();
 
       if (!data.success || !data.user.isAdmin) {
@@ -233,7 +232,7 @@ export default function AdminDashboard() {
       setIsLoading(true);
       const response = await fetch('/api/admin/pending-users');
       const data = await response.json();
-      
+
       if (data.success) {
         setPendingUsers(data.users);
         setNotifications(data.users.length);
@@ -365,9 +364,9 @@ export default function AdminDashboard() {
             onClick={() => setIsNavCollapsed(!isNavCollapsed)}
             className="p-1.5 rounded-lg hover:bg-[#282828] transition-colors"
           >
-            <ChevronLeft 
+            <ChevronLeft
               className={`w-5 h-5 text-[#E0E0E0] transform transition-transform duration-300 
-                ${isNavCollapsed ? 'rotate-180' : ''}`} 
+                ${isNavCollapsed ? 'rotate-180' : ''}`}
             />
           </button>
         </div>
@@ -375,7 +374,7 @@ export default function AdminDashboard() {
         <div className="px-2 py-6 h-[calc(100vh-4rem)] overflow-y-auto">
           <ul className="space-y-2">
             {menuItems.map((item) => (
-              <motion.li 
+              <motion.li
                 key={item.id}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -473,13 +472,13 @@ export default function AdminDashboard() {
                       <p className="text-xs text-[#9A9A9A]">Administrator</p>
                     </div>
                     <div className="py-1">
-                      <Link href="/admin/settings" 
+                      <Link href="/admin/settings"
                         className="flex items-center gap-2 px-4 py-2 text-[#9A9A9A] hover:bg-[#282828] hover:text-[#E0E0E0] transition-colors"
                       >
                         <Settings className="w-4 h-4" />
                         <span>Settings</span>
                       </Link>
-                      <Link href="/admin/help" 
+                      <Link href="/admin/help"
                         className="flex items-center gap-2 px-4 py-2 text-[#9A9A9A] hover:bg-[#282828] hover:text-[#E0E0E0] transition-colors"
                       >
                         <HelpCircle className="w-4 h-4" />
@@ -505,7 +504,7 @@ export default function AdminDashboard() {
           {/* Error Alert */}
           <AnimatePresence>
             {error && (
-              <motion.div 
+              <motion.div
                 initial={fadeInUp.initial}
                 animate={fadeInUp.animate}
                 exit={fadeInUp.exit}
@@ -524,7 +523,7 @@ export default function AdminDashboard() {
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                 {/* Total Users Card */}
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   className={`bg-gradient-to-b from-[#1E1E1E] to-[#181818] rounded-lg p-6 border border-[#282828] transition-all duration-300 cursor-pointer
                     ${viewMode === 'all' ? 'border-[#FFC857]' : 'hover:border-[#FFC857]/50'}`}
@@ -542,7 +541,7 @@ export default function AdminDashboard() {
                 </motion.div>
 
                 {/* Active Users Card */}
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   className={`bg-gradient-to-b from-[#1E1E1E] to-[#181818] rounded-lg p-6 border border-[#282828] transition-all duration-300 cursor-pointer
                     ${viewMode === 'active' ? 'border-green-500' : 'hover:border-green-500/50'}`}
@@ -561,7 +560,7 @@ export default function AdminDashboard() {
                 </motion.div>
 
                 {/* Pending Requests Card */}
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   className={`bg-gradient-to-b from-[#1E1E1E] to-[#181818] rounded-lg p-6 border border-[#282828] transition-all duration-300 cursor-pointer
                     ${viewMode === 'pending' ? 'border-yellow-500' : 'hover:border-yellow-500/50'}`}
@@ -579,7 +578,7 @@ export default function AdminDashboard() {
                 </motion.div>
 
                 {/* System Status Card */}
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-gradient-to-b from-[#1E1E1E] to-[#181818] rounded-lg p-6 border border-[#282828] hover:border-[#4A90E2]/50 transition-all duration-300"
                 >
@@ -654,7 +653,7 @@ export default function AdminDashboard() {
                         </tr>
                       ) : getUsersToDisplay().length > 0 ? (
                         getUsersToDisplay().map((user) => (
-                          <tr 
+                          <tr
                             key={user._id}
                             className="hover:bg-[#282828]/50 transition-colors"
                           >
@@ -674,14 +673,13 @@ export default function AdminDashboard() {
                               </span>
                             </td>
                             <td className="px-6 py-4">
-                              <span 
-                                className={`px-3 py-1 text-xs font-medium rounded-full ${
-                                  viewMode === 'pending'
+                              <span
+                                className={`px-3 py-1 text-xs font-medium rounded-full ${viewMode === 'pending'
                                     ? 'bg-yellow-500/10 text-yellow-500'
                                     : user.isActive
                                       ? 'bg-green-500/10 text-green-500'
                                       : 'bg-red-500/10 text-red-500'
-                                }`}
+                                  }`}
                               >
                                 {viewMode === 'pending' ? 'Pending' : user.isActive ? 'Active' : 'Inactive'}
                               </span>
@@ -715,11 +713,11 @@ export default function AdminDashboard() {
                               <AlertCircle className="mx-auto h-12 w-12 text-[#9A9A9A]" />
                               <h3 className="mt-4 text-lg font-medium text-[#E0E0E0]">No users found</h3>
                               <p className="mt-2 text-sm text-[#9A9A9A]">
-                                {viewMode === 'pending' 
+                                {viewMode === 'pending'
                                   ? 'No pending approval requests'
                                   : viewMode === 'active'
-                                  ? 'No active users at the moment'
-                                  : 'Try adjusting your search or filter'}
+                                    ? 'No active users at the moment'
+                                    : 'Try adjusting your search or filter'}
                               </p>
                             </div>
                           </td>
@@ -760,7 +758,7 @@ export default function AdminDashboard() {
             </div>
             <div className="divide-y divide-[#282828]">
               {pendingUsers.map((user) => (
-                <motion.div 
+                <motion.div
                   key={user._id}
                   initial={slideIn.initial}
                   animate={slideIn.animate}
