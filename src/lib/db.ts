@@ -5,10 +5,8 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://protubex.rast.in:27017
 // Track the connection status
 let isConnected = false;
 
-// Connection options for optimization
-const options: any = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Connection options with current Mongoose options
+const options: mongoose.ConnectOptions = {
   maxPoolSize: 10,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,

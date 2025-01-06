@@ -10,7 +10,24 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends(
+    "next/core-web-vitals",
+    "next/typescript"
+  ),
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    parser: "@typescript-eslint/parser",
+    plugins: ["@typescript-eslint"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }],
+      // Add more TypeScript-specific rules here
+    }
+  }
 ];
 
 export default eslintConfig;

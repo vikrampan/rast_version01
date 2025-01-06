@@ -1,7 +1,8 @@
 import { Connection, Model } from 'mongoose';
 
 declare global {
-  var mongoose: {
+  // We use 'let' instead of 'var' here as it's block-scoped
+  let mongoose: {
     conn: Connection | null;
     promise: Promise<Connection> | null;
   };

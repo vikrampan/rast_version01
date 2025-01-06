@@ -2,7 +2,30 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import mongoose from 'mongoose';
 
-const pendingUserSchema = new mongoose.Schema({
+// Define interfaces for type safety
+interface IPendingUser {
+  _id: mongoose.Types.ObjectId;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  organization: string;
+  accessLevel: string;
+  registrationDate: Date;
+  status: string;
+}
+
+interface MongoSearchFilter {
+  $or?: {
+    [key: string]: {
+      $regex: string;
+      $options: string;
+    };
+  }[];
+  status?: string;
+}
+
+const pendingUserSchema = new mongoose.Schema<IPendingUser>({
   firstName: String,
   lastName: String,
   email: { type: String, unique: true },
@@ -13,7 +36,8 @@ const pendingUserSchema = new mongoose.Schema({
   status: String
 }, { collection: 'pendingusers' });
 
-const PendingUsers = mongoose.models.pendingusers || mongoose.model('pendingusers', pendingUserSchema);
+const PendingUsers = mongoose.models.pendingusers || 
+  mongoose.model<IPendingUser>('pendingusers', pendingUserSchema);
 
 export async function GET(request: Request) {
   try {
@@ -26,7 +50,7 @@ export async function GET(request: Request) {
 
     await connectDB();
 
-    let filter: any = {};
+    const filter: MongoSearchFilter = {};
 
     // Add search query if provided
     if (query) {
@@ -43,9 +67,13 @@ export async function GET(request: Request) {
       filter.status = status;
     }
 
-    const users = await PendingUsers.find(filter)
+    const rawUsers = await PendingUsers.find(filter)
       .select('-password')
-      .sort({ registrationDate: -1 });
+      .sort({ registrationDate: -1 })
+      .lean();
+
+    // Type assertion for the query result
+    const users = rawUsers as unknown as Array<Omit<IPendingUser, 'password'> & { _id: mongoose.Types.ObjectId }>;
 
     console.log('Found users:', users.length);
 

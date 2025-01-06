@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import type { PluginAPI } from 'tailwindcss/types/config';
 
 export default {
   content: [
@@ -50,6 +51,22 @@ export default {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
+        // Dashboard specific colors
+        dashboard: {
+          sidebar: {
+            DEFAULT: "#1a1a1a",
+            hover: "#2a2a2a",
+            active: "#333333",
+          },
+          content: {
+            DEFAULT: "#121212",
+            paper: "#1e1e1e",
+          },
+          accent: {
+            primary: "#FFC857",
+            secondary: "#4A90E2",
+          }
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -133,6 +150,18 @@ export default {
           '0%, 100%': { transform: 'translateY(-2px)' },
           '50%': { transform: 'translateY(0)' }
         },
+        sidebarExpand: {
+          '0%': { width: '4rem' },
+          '100%': { width: '16rem' }
+        },
+        sidebarCollapse: {
+          '0%': { width: '16rem' },
+          '100%': { width: '4rem' }
+        },
+        menuSlideDown: {
+          '0%': { height: '0', opacity: '0' },
+          '100%': { height: 'var(--menu-height)', opacity: '1' }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -148,8 +177,24 @@ export default {
         slideInFromRight: 'slideInFromRight 0.5s ease-out',
         fadeInDown: 'fadeInDown 0.5s ease-out',
         bounce: 'bounce 2s infinite',
+        sidebarExpand: 'sidebarExpand 0.3s ease-out forwards',
+        sidebarCollapse: 'sidebarCollapse 0.3s ease-out forwards',
+        menuSlideDown: 'menuSlideDown 0.3s ease-out forwards'
       },
+      height: {
+        'screen-navbar': 'calc(100vh - 4rem)',
+      },
+      transitionProperty: {
+        'width': 'width',
+        'spacing': 'margin, padding',
+      }
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addVariant }: PluginAPI) {
+      addVariant('sidebar-expanded', '&[data-expanded="true"]')
+      addVariant('sidebar-collapsed', '&[data-expanded="false"]')
+    }
+  ],
 } satisfies Config;

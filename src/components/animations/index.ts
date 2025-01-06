@@ -1,10 +1,12 @@
 // src/components/animations/index.ts
 
+import { AnimationVariant, Transition } from './types';
+
 export * from './variants';
 export * from './types';
 
 // Utility functions for animations
-export const combineVariants = (...variants: any[]) => {
+export const combineVariants = (...variants: AnimationVariant[]): AnimationVariant => {
   return variants.reduce((combined, current) => ({
     ...combined,
     ...current,
@@ -12,35 +14,40 @@ export const combineVariants = (...variants: any[]) => {
       ...combined?.animate,
       ...current?.animate,
     },
-    transition: {
-      ...combined?.transition,
-      ...current?.transition,
-    },
-  }), {});
+    ...(combined?.transition || current?.transition ? {
+      transition: {
+        ...(combined?.transition || {}),
+        ...(current?.transition || {})
+      }
+    } : {})
+  }), {} as AnimationVariant);
 };
 
-export const withDelay = (variant: any, delay: number) => {
+export const withDelay = (variant: AnimationVariant, delayTime: number): AnimationVariant => {
   return {
     ...variant,
     animate: {
       ...variant.animate,
       transition: {
         ...variant.animate?.transition,
-        delay,
-      },
-    },
+        delay: delayTime
+      }
+    }
   };
 };
 
-export const withCustomTransition = (variant: any, customTransition: any) => {
+export const withCustomTransition = (
+  variant: AnimationVariant, 
+  customTransition: Partial<Transition>
+): AnimationVariant => {
   return {
     ...variant,
     animate: {
       ...variant.animate,
       transition: {
         ...variant.animate?.transition,
-        ...customTransition,
-      },
-    },
+        ...customTransition
+      }
+    }
   };
 };

@@ -53,17 +53,20 @@ export async function GET() {
         );
       }
 
+      // Modified response to include full name and proper access level
       return NextResponse.json({
         success: true,
         user: {
           id: user._id,
+          name: `${user.firstName} ${user.lastName}`,
           email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          accessLevel: user.accessLevel.charAt(0).toUpperCase() + user.accessLevel.slice(1),
           isAdmin: user.isAdmin,
-          isSuperAdmin: user.isSuperAdmin
+          isSuperAdmin: user.isSuperAdmin,
+          organization: user.organization
         }
       });
+
     } catch (jwtError) {
       console.error('JWT verification failed:', jwtError);
       return NextResponse.json(

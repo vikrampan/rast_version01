@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
- 
+
 /**
  * Merges class names using clsx and tailwind-merge
  * This utility function helps combine Tailwind CSS classes safely
@@ -52,18 +52,18 @@ export const isServer = typeof window === "undefined"
  * @param func - Function to debounce
  * @param wait - Milliseconds to wait
  */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
+export function debounce<F extends (...args: Parameters<F>) => ReturnType<F>>(
+  func: F,
   wait: number
-): (...args: Parameters<T>) => void {
+): (...args: Parameters<F>) => void {
   let timeout: NodeJS.Timeout | null = null
-  
-  return function executedFunction(...args: Parameters<T>) {
+
+  return function executedFunction(...args: Parameters<F>) {
     const later = () => {
       timeout = null
       func(...args)
     }
-    
+
     if (timeout) {
       clearTimeout(timeout)
     }
@@ -106,12 +106,12 @@ export function randomString(length: number): string {
  * Check if value is empty (null, undefined, empty string, empty array, empty object)
  * @param value - Value to check
  */
-export function isEmpty(value: any): boolean {
+export function isEmpty(value: unknown): boolean {
   return (
     value === null ||
     value === undefined ||
     value === "" ||
     (Array.isArray(value) && value.length === 0) ||
-    (typeof value === "object" && Object.keys(value).length === 0)
+    (typeof value === "object" && value !== null && Object.keys(value).length === 0)
   )
 }

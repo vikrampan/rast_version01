@@ -3,7 +3,36 @@ import connectDB from '@/lib/db';
 import mongoose from 'mongoose';
 import { ensureIndexes } from '@/lib/createIndexes';
 
-const pendingUserSchema = new mongoose.Schema({
+// Define interfaces for type safety
+interface IPendingUser {
+  _id: mongoose.Types.ObjectId;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  organization: string;
+  accessLevel: string;
+  registrationDate: Date;
+  status: string;
+}
+
+interface FormattedPendingUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  organization: string;
+  accessLevel: string;
+  registrationDate: Date;
+  status: string;
+}
+
+interface CacheItem {
+  data: FormattedPendingUser[];
+  timestamp: number;
+}
+
+const pendingUserSchema = new mongoose.Schema<IPendingUser>({
   firstName: String,
   lastName: String,
   email: { type: String, unique: true },
@@ -12,15 +41,16 @@ const pendingUserSchema = new mongoose.Schema({
   accessLevel: String,
   registrationDate: { type: Date, default: Date.now },
   status: { type: String, default: 'pending' }
-}, { 
+}, {
   collection: 'pendingusers',
-  timestamps: true 
+  timestamps: true
 });
 
-const PendingUsers = mongoose.models.pendingusers || mongoose.model('pendingusers', pendingUserSchema);
+const PendingUsers = mongoose.models.pendingusers || 
+  mongoose.model<IPendingUser>('pendingusers', pendingUserSchema);
 
-// Cache object
-const cache: { [key: string]: { data: any; timestamp: number } } = {};
+// Cache object with proper typing
+const cache: Record<string, CacheItem> = {};
 const CACHE_DURATION = 30000; // 30 seconds
 
 export async function GET() {
@@ -39,7 +69,7 @@ export async function GET() {
 
     console.log('🔄 Fetching fresh data');
     await connectDB();
-    
+
     // Ensure indexes exist
     await ensureIndexes();
 
@@ -49,10 +79,10 @@ export async function GET() {
       .select('-password -__v')
       .lean()
       .sort({ registrationDate: -1 })
-      .limit(50);
+      .limit(50) as unknown as (Omit<IPendingUser, 'password'> & { _id: mongoose.Types.ObjectId })[];
 
     // Format the response data
-    const formattedUsers = users.map(user => ({
+    const formattedUsers: FormattedPendingUser[] = users.map(user => ({
       _id: user._id.toString(),
       firstName: user.firstName,
       lastName: user.lastName,

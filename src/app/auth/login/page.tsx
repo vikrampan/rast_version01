@@ -1,24 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeField, setActiveField] = useState('');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: ''
   });
 
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -62,7 +67,7 @@ export default function Login() {
           {/* Logo Section */}
           <div className="flex flex-col items-center mb-8 animate-fadeInDown">
             <div className="transition-all duration-500 transform hover:scale-110 mb-4 group">
-              <Image 
+              <Image
                 src="/images/logo.png"
                 alt="Company Logo"
                 width={96}
@@ -150,7 +155,7 @@ export default function Login() {
               </div>
 
               {/* Additional Options */}
-              <div className="flex items-center justify-between pt-2 animate-fadeInDown" 
+              <div className="flex items-center justify-between pt-2 animate-fadeInDown"
                 style={{ animationDelay: '500ms' }}
               >
                 <label className="flex items-center space-x-2 group">
@@ -201,8 +206,8 @@ export default function Login() {
             <div className="text-center pt-4 animate-fadeInDown" style={{ animationDelay: '700ms' }}>
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <Link 
-                  href="/auth/signup" 
+                <Link
+                  href="/auth/signup"
                   className="text-gray-900 hover:text-gray-700 font-medium 
                     transition-colors duration-300 hover:underline"
                 >
@@ -298,7 +303,7 @@ export default function Login() {
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
-          <div className="absolute inset-0" 
+          <div className="absolute inset-0"
             style={{
               backgroundImage: 'radial-gradient(circle at 2px 2px, gray 1px, transparent 0)',
               backgroundSize: '32px 32px'
