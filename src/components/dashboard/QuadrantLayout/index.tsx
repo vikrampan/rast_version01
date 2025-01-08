@@ -2,6 +2,21 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { OrbitControls } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import TopCylinder from '@/components/3d-components/TopCylinder';
+import BottomCylinder from '@/components/3d-components/BottomCylinder';
+import MidCylinder from '@/components/3d-components/MidCylinder';
+import PlateWithCylindersLower from '@/components/3d-components/PlateWithCylindersLower';
+import PlateWithCylindersUpper from '@/components/3d-components/PlateWithCylindersUpper';
+import TubeSheet from '@/components/3d-components/TubeSheet';
+import ChimneyBottomValve from '@/components/3d-components/ChimneyBottomValve';
+import ChimneyTopValve from '@/components/3d-components/ChimneyTopValve';
+import ChimneyBase from '@/components/3d-components/ChimneyBase';
+import HeatExchangerDetailedView from '@/components/3d-sections/HeatExchangerDetailedView';
+import TubeSheetSection from '@/components/3d-sections/TubeSheetSection';
+import RiserSection from '@/components/3d-sections/RiserSection';
+
 
 interface Screen {
   id: string;
@@ -26,20 +41,21 @@ const QuadrantLayout: React.FC<QuadrantLayoutProps> = ({ method, screenType, scr
     switch (screen.id) {
       case '3d-model':
         return (
-          <div className="h-full flex items-center justify-center text-[#9A9A9A]">
+          <div className="h-[250px] flex items-center justify-center bg-white text-[#9A9A9A]">
             {/* TODO: Implement 3D model visualization for TubeSheet/Riser */}
-            <p>3D Model Visualization - {screenType}</p>
+            <HeatExchangerDetailedView/>
           </div>
         );
 
       case 'inspection-area':
         return (
-          <div className="h-full flex items-center justify-center text-[#9A9A9A]">
+          <div className="h-[250px] flex items-center bg-white justify-center text-[#9A9A9A]">
             {/* TODO: Implement TubeSheet/Riser area visualization */}
             {screenType === 'TubeSheet' ? (
-              <p>TubeSheet Area - Check for blocked holes</p>
+              // <p>TubeSheet Area - Check for blocked holes</p>
+              <TubeSheetSection />
             ) : (
-              <p>Riser Area - Check for cracks</p>
+              <RiserSection />
             )}
           </div>
         );
@@ -81,7 +97,7 @@ const QuadrantLayout: React.FC<QuadrantLayoutProps> = ({ method, screenType, scr
             <h3 className="text-lg font-medium text-[#E0E0E0]">{screen.title}</h3>
             <span className="text-sm text-[#9A9A9A]">{method}</span>
           </div>
-          
+
           {renderQuadrantContent(screen)}
         </motion.div>
       ))}

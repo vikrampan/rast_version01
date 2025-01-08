@@ -36,6 +36,6 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/createAdmin.js", "src/scripts/createAdmin.js", "src/scripts/runSuperAdminSeeder.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/createAdmin.js", "src/scripts/createAdmin.js", "src/scripts/runSuperAdminSeeder.js", "next.config.mjs"],
   "exclude": ["node_modules"]
 }
